@@ -80,7 +80,9 @@ class TwoLayerNet(object):
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        fc1 = X.dot(W1) + b1     # fully connected
+        X2 = np.maximum(0, fc1)  # ReLU
+        scores = X2.dot(W2) + b2 # fully connected
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
