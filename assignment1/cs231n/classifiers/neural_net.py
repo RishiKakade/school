@@ -100,7 +100,12 @@ class TwoLayerNet(object):
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        scores -= np.max(scores, axis=1, keepdims=True) # avoid numeric instability
+        scores_exp = np.exp(scores)
+        softmax_matrix = scores_exp / np.sum(scores_exp, axis=1, keepdims=True) 
+        loss = np.sum(-np.log(softmax_matrix[np.arange(N), y]))
+        loss /= N
+        loss += reg * (np.sum(W2 * W2) + np.sum( W1 * W1 )) # regularization
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
