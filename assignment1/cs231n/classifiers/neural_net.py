@@ -129,14 +129,14 @@ class TwoLayerNet(object):
         softmax_matrix /= N
 
         # W2 gradient
-        dW2 = X2.T.dot(softmax_matrix)   # [HxN] * [NxC] = [HxC]
+        dW2 = hidden_layers.T.dot(softmax_matrix)   # [HxN] * [NxC] = [HxC]
 
         # b2 gradient
         db2 = softmax_matrix.sum(axis=0)
 
         # W1 gradient
         dW1 = softmax_matrix.dot(W2.T)   # [NxC] * [CxH] = [NxH]
-        dfc1 = dW1 * (fc1>0)             # [NxH] . [NxH] = [NxH]
+        dfc1 = dW1 * (X.dot(W1) + b1>0)             # [NxH] . [NxH] = [NxH]
         dW1 = X.T.dot(dfc1)              # [DxN] * [NxH] = [DxH]
 
         # b1 gradient
