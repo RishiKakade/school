@@ -138,14 +138,14 @@ class TwoLayerNet(object):
         # W1 gradient
         # grad_hidden = error of second layer * activation energy of hidden layer from part 1
         # activation of hidden layer = first layer after relu
-        grad_hidden_layer = softmax.dot(W2.T)*((X.dot(W1)+b1)>0)
+        grad_hidden_layer = softmax.dot(W2.T) * ((X.dot(W1)+b1)>0)
         grads['W1'] = X.T.dot(grad_hidden_layer)
         # b1 gradient
         grads['b1'] = grad_hidden_layer.sum(axis=0)
 
         # regularization
-        grads['W1'] = grads['W1'] + 2*grads['W1']*reg
-        grads['W2'] = grads['W2'] + 2*grads['W2']*reg
+        grads['W1'] = grads['W1'] + 2*reg*W1
+        grads['W2'] = grads['W2'] + 2*reg*W2
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
