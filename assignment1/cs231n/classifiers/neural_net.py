@@ -103,12 +103,16 @@ class TwoLayerNet(object):
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        scores -= np.max(scores, axis=1, keepdims=True) # avoid numeric instability
-        scores_exp = np.exp(scores)
-        softmax_matrix = scores_exp / np.sum(scores_exp, axis=1, keepdims=True)
-        loss = np.sum(-np.log(softmax_matrix[np.arange(N), y]))
-        loss /= N
-        loss += reg * (np.sum(W2 * W2) + np.sum( W1 * W1 )) # regularization
+        # shift the values in the scores array and keep dimensions the same to make 
+        # sure the calculation of the exponential function doesn't break 
+        scores = scores - np.max(scores, axis=1, keepdims=True)
+        # softmax outputs probability that an input sample belongs a category.
+        # the output is the model's "prediction" 
+        softmax = np.exp(scores) / np.sum(np.exp(scores),axis=1, keepdims=True)
+        # take the highest prob category and compute log likelyhood
+        loss = np.sum(  -np.log(  softmax[np.arange(N),y]  )   )/N
+        # L2 regularization
+        loss = loss + reg*(np.sum(W1 * W1) + np.sum(W2 * W2))
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
