@@ -161,7 +161,7 @@ class TwoLayerNet(object):
 
         # regularization
         grads['W1'] = grads['W1'] + 2*grads['W1']*reg
-        grads['W2'] = grads['W1'] + 2*grads['W2']*reg
+        grads['W2'] = grads['W2'] + 2*grads['W2']*reg
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
