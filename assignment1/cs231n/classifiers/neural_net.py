@@ -80,9 +80,12 @@ class TwoLayerNet(object):
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        fc1 = X.dot(W1) + b1     # fully connected
-        X2 = np.maximum(0, fc1)  # ReLU
-        scores = X2.dot(W2) + b2 # fully connected
+        # compute activation energies of hidden layer with relu 
+        # relu parameters are input data dotted with weight of first layer + first 
+        # layer bias
+        hidden_layers = np.maximum(0, X.dot(W1) + b1)  
+        # compute score with second layer weights and biases
+        scores = hidden_layers.dot(W2) + b2 
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
