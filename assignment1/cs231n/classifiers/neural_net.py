@@ -125,28 +125,43 @@ class TwoLayerNet(object):
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        softmax_matrix[np.arange(N) ,y] -= 1
-        softmax_matrix /= N
+        # gradient of sofmax output
+        softmax[np.arange(N),y] = (softmax[np.arange(N),y]-1)
+        # average loss along all samples
+        softmax /= N 
 
-        # W2 gradient
-        dW2 = hidden_layers.T.dot(softmax_matrix)   # [HxN] * [NxC] = [HxC]
-
+        # w2 gradient
+        grads['W2'] = hidden_layers.T.dot(softmax)   
         # b2 gradient
-        db2 = softmax_matrix.sum(axis=0)
+        grads['b2'] = softmax.sum(axis=0)
+        
+        # The calculation of the W1 gradient involves multiplying the error from the 
+        # second layer with the activations of the hidden layer (the output of the 
+        # first layer after applying the ReLU activation function). The error and 
+        # activations are combined using the transpose operation to get the gradient 
+        # with respect to the weights. This is done because we want to propagate the 
+        # error backwards through the network, and to do that, we need to find how 
+        # the error changes with respect to the weights W1.
+
+        #Formally, the calculation for the W1 gradient can be represented as:
+        #dW1 = np.dot(X.T, dhidden_layer)
+        #where X is the input data, dhidden_layer is the error from the second layer 
+        # multiplied by the derivative of the activation function for the hidden 
+        # layer (i.e., the gradient of the ReLU activation), and the dot product 
+        # between X.T and dhidden_layer gives us the gradient with respect to the 
+        # weights W1.
 
         # W1 gradient
-        dW1 = softmax_matrix.dot(W2.T)   # [NxC] * [CxH] = [NxH]
-        dfc1 = dW1 * (X.dot(W1) + b1>0)             # [NxH] . [NxH] = [NxH]
-        dW1 = X.T.dot(dfc1)              # [DxN] * [NxH] = [DxH]
-
+        # grad_hidden = error of second layer * activation energy of hidden layer from part 1
+        # activation of hidden layer = first layer after relu
+        grad_hidden_layer = softmax.dot(W2.T)*(X.dot(W1)+b1>0)
+        grads['W1'] = X.T.dot(grad_hidden_layer)
         # b1 gradient
-        db1 = dfc1.sum(axis=0)
+        grads['b1'] = grad_hidden_layer.sum()
 
-        # regularization gradient
-        dW1 += reg * 2 * W1
-        dW2 += reg * 2 * W2
-
-        grads = {'W1':dW1, 'b1':db1, 'W2':dW2, 'b2':db2}
+        # regularization
+        grads['W1'] = grads['W1'] + 2*grads['W1']*reg
+        grads['W2'] = grads['W1'] + 2*grads['W2']*reg
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
