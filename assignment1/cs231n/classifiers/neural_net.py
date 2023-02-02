@@ -157,7 +157,7 @@ class TwoLayerNet(object):
         grad_hidden_layer = softmax.dot(W2.T)*(X.dot(W1)+b1>0)
         grads['W1'] = X.T.dot(grad_hidden_layer)
         # b1 gradient
-        grads['b1'] = grad_hidden_layer.sum()
+        grads['b1'] = grad_hidden_layer.sum(axis=0)
 
         # regularization
         grads['W1'] = grads['W1'] + 2*grads['W1']*reg
